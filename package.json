@@ -1,0 +1,33 @@
+{
+  "name": "ot-text",
+  "version": "1.0.0",
+  "description": "OT type for plaintext",
+  "main": "lib/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "ot-fuzzer": "~1.0.0",
+    "mocha": "^1.20.1"
+  },
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ottypes/text.git"
+  },
+  "keywords": [
+    "ot",
+    "text",
+    "sharejs"
+  ],
+  "author": "Joseph Gentle <me@josephg.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ottypes/text/issues"
+  },
+  "homepage": "https://github.com/ottypes/text"
+}
