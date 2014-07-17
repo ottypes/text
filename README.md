@@ -3,6 +3,8 @@
 This OT type can be used to edit plaintext documents, like sourcecode or
 markdown.
 
+This project's [history is here](https://github.com/share/ShareJS/blob/0.6/src/types/text2.coffee).
+
 For a description of what methods the type exposes, see [ottypes/docs](/ottypes/docs).
 
 ## Spec
@@ -61,7 +63,7 @@ that end can be before start.
 # Commentary
 
 This is the 3rd iteration of ShareJS's plaintext type. It hasn't been changed
-in a long time, and will probably be very stable going forward.
+in a long time now.
 
 The first iteration was similar, except it is invertable. Invertability is
 nice, but I want to eventually build an arbitrary P2P OT system, and in a p2p
