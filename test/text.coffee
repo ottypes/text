@@ -4,7 +4,9 @@ fs = require 'fs'
 assert = require 'assert'
 
 fuzzer = require 'ot-fuzzer'
-text = require('../lib').type
+text = require('../lib')
+type = text.type
+genOp = require './genOp'
 
 readOp = (file) ->
   op = for c in JSON.parse file.shift()
@@ -15,7 +17,7 @@ readOp = (file) ->
     else
       {d:c.d.length}
 
-  text.normalize op
+  type.normalize op
 
 
 describe 'text', ->
@@ -26,10 +28,10 @@ describe 'text', ->
       while testData.length >= 4
         op = readOp testData
         otherOp = readOp testData
-        type = testData.shift()
+        side = testData.shift()
         expected = readOp testData
 
-        result = text.transform op, otherOp, type
+        result = type.transform op, otherOp, side
 
         assert.deepEqual result, expected
 
@@ -44,59 +46,59 @@ describe 'text', ->
 
         # nothing interesting is done with result... This test just makes sure compose runs
         # without crashing.
-        result = text.compose(op1, op2)
+        result = type.compose(op1, op2)
 
   describe '#create()', ->
     it 'should return an empty string when called with no arguments', ->
-      assert.strictEqual '', text.create()
+      assert.strictEqual '', type.create()
     it 'should return any string thats passed in', ->
-      assert.strictEqual '', text.create ''
-      assert.strictEqual 'oh hi', text.create 'oh hi'
+      assert.strictEqual '', type.create ''
+      assert.strictEqual 'oh hi', type.create 'oh hi'
     it 'throws when something other than a string is passed in', ->
-      assert.throws (-> text.create 123), /must be a string/
+      assert.throws (-> type.create 123), /must be a string/
 
   it 'should normalize sanely', ->
-    assert.deepEqual [], text.normalize [0]
-    assert.deepEqual [], text.normalize ['']
-    assert.deepEqual [], text.normalize [{d:0}]
+    assert.deepEqual [], type.normalize [0]
+    assert.deepEqual [], type.normalize ['']
+    assert.deepEqual [], type.normalize [{d:0}]
 
-    assert.deepEqual [], text.normalize [1,1]
-    assert.deepEqual [], text.normalize [2,0]
-    assert.deepEqual ['a'], text.normalize ['a', 100]
-    assert.deepEqual ['ab'], text.normalize ['a', 'b']
-    assert.deepEqual ['ab'], text.normalize ['ab', '']
-    assert.deepEqual ['ab'], text.normalize [0, 'a', 0, 'b', 0]
-    assert.deepEqual ['a', 1, 'b'], text.normalize ['a', 1, 'b']
+    assert.deepEqual [], type.normalize [1,1]
+    assert.deepEqual [], type.normalize [2,0]
+    assert.deepEqual ['a'], type.normalize ['a', 100]
+    assert.deepEqual ['ab'], type.normalize ['a', 'b']
+    assert.deepEqual ['ab'], type.normalize ['ab', '']
+    assert.deepEqual ['ab'], type.normalize [0, 'a', 0, 'b', 0]
+    assert.deepEqual ['a', 1, 'b'], type.normalize ['a', 1, 'b']
 
   describe '#selectionEq', ->
     it 'just does equality on plain numbers', ->
-      assert text.selectionEq 5, 5
-      assert text.selectionEq 0, 0
-      assert.equal false, text.selectionEq 0, 1
-      assert.equal false, text.selectionEq 5, 1
+      assert type.selectionEq 5, 5
+      assert type.selectionEq 0, 0
+      assert.equal false, type.selectionEq 0, 1
+      assert.equal false, type.selectionEq 5, 1
 
     it 'compares pairs correctly', ->
-      assert text.selectionEq [1,2], [1,2]
-      assert text.selectionEq [2,2], [2,2]
-      assert text.selectionEq [0,0], [0,0]
-      assert text.selectionEq [0,1], [0,1]
-      assert text.selectionEq [1,0], [1,0]
+      assert type.selectionEq [1,2], [1,2]
+      assert type.selectionEq [2,2], [2,2]
+      assert type.selectionEq [0,0], [0,0]
+      assert type.selectionEq [0,1], [0,1]
+      assert type.selectionEq [1,0], [1,0]
 
-      assert.equal false, text.selectionEq [1,2], [1,0]
-      assert.equal false, text.selectionEq [0,2], [0,1]
-      assert.equal false, text.selectionEq [1,0], [5,0]
-      assert.equal false, text.selectionEq [1,1], [5,5]
+      assert.equal false, type.selectionEq [1,2], [1,0]
+      assert.equal false, type.selectionEq [0,2], [0,1]
+      assert.equal false, type.selectionEq [1,0], [5,0]
+      assert.equal false, type.selectionEq [1,1], [5,5]
 
     it 'works with array vs number', ->
-      assert text.selectionEq 0, [0,0]
-      assert text.selectionEq 1, [1,1]
-      assert text.selectionEq [0,0], 0
-      assert text.selectionEq [1,1], 1
+      assert type.selectionEq 0, [0,0]
+      assert type.selectionEq 1, [1,1]
+      assert type.selectionEq [0,0], 0
+      assert type.selectionEq [1,1], 1
 
-      assert.equal false, text.selectionEq 1, [1,0]
-      assert.equal false, text.selectionEq 0, [0,1]
-      assert.equal false, text.selectionEq [1,2], 1
-      assert.equal false, text.selectionEq [0,2], 0
+      assert.equal false, type.selectionEq 1, [1,0]
+      assert.equal false, type.selectionEq 0, [0,1]
+      assert.equal false, type.selectionEq [1,2], 1
+      assert.equal false, type.selectionEq [0,2], 0
 
   describe '#transformSelection()', ->
     # This test was copied from https://github.com/josephg/libot/blob/master/test.c
@@ -105,8 +107,8 @@ describe 'text', ->
     op = [10, 'oh hi', 10, {d:20}] # The previous ops composed together
 
     tc = (op, isOwn, cursor, expected) ->
-      assert text.selectionEq expected, text.transformSelection cursor, op, isOwn
-      assert text.selectionEq expected, text.transformSelection [cursor, cursor], op, isOwn
+      assert type.selectionEq expected, type.transformSelection cursor, op, isOwn
+      assert type.selectionEq expected, type.transformSelection [cursor, cursor], op, isOwn
  
     it "shouldn't move a cursor at the start of the inserted text", ->
       tc op, false, 10, 10
@@ -149,6 +151,8 @@ describe 'text', ->
 
   describe 'randomizer', -> it 'passes', ->
     @slow 1500
-    fuzzer text, require('./genOp')
+    fuzzer type, genOp
 
+# And test the API.
+require('./api') text, genOp
 
