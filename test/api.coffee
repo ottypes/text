@@ -5,6 +5,7 @@ assert = require 'assert'
 {randomInt, randomReal, randomWord} = require 'ot-fuzzer'
 
 module.exports = (type, genOp) -> describe "text api for '#{type.name}'", ->
+  throw 'Type does not claim to provide the text api' unless type.api.provides.text
   beforeEach ->
     # This is a little copy of the context structure created in client/doc.
     # It would probably be better to copy the code, but whatever.
@@ -17,7 +18,6 @@ module.exports = (type, genOp) -> describe "text api for '#{type.name}'", ->
       callback?()
 
     @ctx = type.api getSnapshot, submitOp
-    throw 'Type does not claim to provide the text api' unless @ctx.provides.text
 
     @apply = (op) ->
       @ctx._beforeOp? op
