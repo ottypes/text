@@ -4,27 +4,25 @@
 assert = require 'assert'
 {randomInt, randomReal, randomWord} = require 'ot-fuzzer'
 
-module.exports = (ot, genOp) -> describe "text api for '#{ot.type.name}'", ->
-  type = ot.type
-  throw 'Type does not claim to provide the text api' unless ot.api.provides.text
+module.exports = (type, genOp) -> describe "text api for '#{type.name}'", ->
   beforeEach ->
     # This is a little copy of the context structure created in client/doc.
     # It would probably be better to copy the code, but whatever.
-    @ctx =
-      _snapshot: type.create()
-      getSnapshot: -> @_snapshot
-      submitOp: (op, callback) ->
-        op = type.normalize op
-        @_snapshot = type.apply @_snapshot, op
-        callback?()
+
+    @snapshot = type.create()
+    getSnapshot = => @snapshot
+    submitOp = (op, callback) =>
+      op = type.normalize op
+      @snapshot = type.apply @snapshot, op
+      callback?()
+
+    @ctx = type.api getSnapshot, submitOp
+    throw 'Type does not claim to provide the text api' unless @ctx.provides.text
 
     @apply = (op) ->
       @ctx._beforeOp? op
-      @ctx.submitOp op
+      submitOp op
       @ctx._onOp op
-
-    @ctx[k] = v for k, v of ot.api
-
 
   it 'has no length when empty', ->
     assert.strictEqual @ctx.get(), ''
@@ -80,7 +78,7 @@ module.exports = (ot, genOp) -> describe "text api for '#{ot.type.name}'", ->
       contents = contents[...pos] + contents[(pos + len)...]
 
     for i in [1..1000]
-      [op, newDoc] = genOp @ctx._snapshot
+      [op, newDoc] = genOp @snapshot
 
       @apply op
       assert.strictEqual @ctx.get(), contents

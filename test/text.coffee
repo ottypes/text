@@ -4,8 +4,7 @@ fs = require 'fs'
 assert = require 'assert'
 
 fuzzer = require 'ot-fuzzer'
-text = require('../lib')
-type = text.type
+type = require('../lib').type
 genOp = require './genOp'
 
 readOp = (file) ->
@@ -154,5 +153,5 @@ describe 'text', ->
     fuzzer type, genOp
 
 # And test the API.
-require('./api') text, genOp
+require('./api') type, genOp
 
