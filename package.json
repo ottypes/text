@@ -1,6 +1,6 @@
 {
   "name": "ot-text",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "OT type for plaintext",
   "main": "lib/index.js",
   "directories": {
