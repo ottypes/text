@@ -149,6 +149,7 @@ describe 'text', ->
 
 
   describe 'randomizer', -> it 'passes', ->
+    @timeout 10000
     @slow 1500
     fuzzer type, genOp
 
