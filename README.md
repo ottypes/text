@@ -17,7 +17,7 @@ documents you should be using a rope library like
 [jumprope](https://github.com/josephg/jumprope) or
 [librope](https://github.com/josephg/librope).
 
-Each operation describes a traversal over the document. The traveral can edit
+Each operation describes a traversal over the document. The traversal can edit
 the document as it goes.
 
 For example, given the document:
