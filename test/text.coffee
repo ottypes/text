@@ -61,8 +61,11 @@ describe 'text', ->
     assert.deepEqual [], type.normalize ['']
     assert.deepEqual [], type.normalize [{d:0}]
 
+    assert.deepEqual [{d:2}], type.normalize [{d:2}]
     assert.deepEqual [], type.normalize [1,1]
     assert.deepEqual [], type.normalize [2,0]
+    assert.deepEqual [2, 'hi'], type.normalize [1,1,'hi']
+    assert.deepEqual [{d:2}, 'hi'], type.normalize [{d:1}, {d:1},'hi']
     assert.deepEqual ['a'], type.normalize ['a', 100]
     assert.deepEqual ['ab'], type.normalize ['a', 'b']
     assert.deepEqual ['ab'], type.normalize ['ab', '']
