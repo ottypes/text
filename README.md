@@ -3,8 +3,10 @@
 **NOTE**: This OT type counts characters using UTF16 offsets instead of
 unicode codepoints. This is slightly faster in javascript, but its
 incompatible with ot implementations in other languages. For future
-projects I recommend that you use [ot-text-
-unicode](https://github.com/ottypes/text-unicode) instead.
+projects I recommend that you use
+[ot-text-unicode](https://github.com/ottypes/text-unicode) instead.
+ot-text-unicode also has full typescript type information and it supports ropes
+for better performance string editing.
 
 
 This OT type can be used to edit plaintext documents, like sourcecode or
