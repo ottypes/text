@@ -1,5 +1,12 @@
 # The Plaintext OT Type
 
+**NOTE**: This OT type counts characters using UTF16 offsets instead of
+unicode codepoints. This is slightly faster in javascript, but its
+incompatible with ot implementations in other languages. For future
+projects I recommend that you use [ot-text-
+unicode](https://github.com/ottypes/text-unicode) instead.
+
+
 This OT type can be used to edit plaintext documents, like sourcecode or
 markdown.
 
@@ -79,14 +86,18 @@ what the current text implementation does. I thought the individual edits style
 was better because I expected it to be simpler, but when I implemented it I
 found the implementation of each method was almost identical in size.
 
-There is also a [C implementation of this type](https://github.com/share/libot/blob/master/text.h) which is
-[insanely](https://dl.dropboxusercontent.com/u/2494815/ot%20apply%20bench%201.png)
-[fast](https://dl.dropboxusercontent.com/u/2494815/ot%20apply%20bench%202.png).
-The implementations are almost the same, except javascript counts characters
-using 16 bit words and the C implementation counts characters using UTF8
-codepoints. This means that if you have any characters in the astral plane in
-your document, edit & cursor positions won't be aligned. See [here for more
-information](http://josephg.com/blog/string-length-lies).
+There is also a [C implementation of this
+type](https://github.com/share/libot/blob/master/text.h) which is [insanely](h
+ttps://dl.dropboxusercontent.com/u/2494815/ot%20apply%20bench%201.png) [fast](
+https://dl.dropboxusercontent.com/u/2494815/ot%20apply%20bench%202.png). The
+implementations are almost the same, except this javascript implemention
+counts characters using 16 bit words and the C implementation counts
+characters using unicode codepoints. If you have any characters in the astral
+plane in your document (like emoji 😅), edit & cursor positions will be
+misaligned between implementations. See [here for more
+information](http://josephg.com/blog/string-length-lies). If you are building
+a cross-platform application, use the newer [ot-text-
+unicode](https://github.com/ottypes/text-unicode) instead.
 
 ---
 
