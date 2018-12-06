@@ -29,7 +29,7 @@ module.exports = genOp = (docStr) ->
     op.push skip
     consume skip
 
-    length = randomInt Math.min docStr.length, 4
+    length = randomInt Math.min docStr.length, 10
     op.push {d:length}
     docStr = docStr[length..]
 
