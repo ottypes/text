@@ -14,7 +14,7 @@ markdown.
 
 This project's [history is here](https://github.com/share/ShareJS/blob/0.6/src/types/text2.coffee).
 
-For documentation on the spec this type implements, see [ottypes/docs](/ottypes/docs).
+For documentation on the spec this type implements, see [ottypes/docs](https://github.com/ottypes/docs).
 
 ## Spec
 
